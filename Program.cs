@@ -22,4 +22,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
+Console.WriteLine("Hi");
+
 app.Run();
