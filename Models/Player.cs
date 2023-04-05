@@ -2,35 +2,44 @@
 // DTO --> external representation
 
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+
 namespace PlayerService.Models
 {
 
     public class Player {
 
+
+        /* can be PlayerId or Id or have key annotation */
         [Key]
         [Required]
         public int Id { get; set;}
         
+        
+        /* nullable reference type allowed by default */
         [Required]
-        public string FirstName {get; set;}
+        public string FirstName {get; set;} = null!;
         
         [Required]
         public string LastName {get; set;}
         
-        [Required]
-        public string Position {get;set;}
-        [Required]      
+        
+        public string? Position {get;set;} = null!;
+             
         public string College {get;set;}
 
-        [Required]
+
+
+        public string? Class {get;set;}
+
+      
         public float Rating {get;set;}
 
 
-        public string PlayerInfo {get;set;}
+        //[Required(AllowEmptyStrings = true)]
+        public string? PlayerInfo {get;set;}
 
-
-        public string Class {get;set;}
-        
+        /*
 
 
         [Required]
@@ -42,13 +51,12 @@ namespace PlayerService.Models
         [Required]
         public float Arms {get;set;}
 
-        [Required]
+
         public float Hands {get;set;}
 
-        [Required]
+
         public int Age {get;set;}
 
-        [Required]
         public string Hometown {get;set;}       
 
         [Required]
@@ -73,7 +81,9 @@ namespace PlayerService.Models
         public float TwentyYardShuttle {get;set;} 
 
         [Required]
-        public float SixtyYardShuttle {get;set;} 
+        [Column(TypeName = "decimal(6,2)")]
+        public decimal SixtyYardShuttle {get;set;}
+        */ 
         
     }
 }

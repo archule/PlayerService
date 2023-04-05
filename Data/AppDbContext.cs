@@ -7,6 +7,7 @@ namespace PlayerService.Data {
 
         }
 
-        public DbSet<Player> Player {get; set;}
+        // DB set for the player table
+        public DbSet<Player> Players {get; set;}
     }
 }
