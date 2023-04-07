@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc;
 using PlayerService.Data;
 using PlayerService.Dtos;
-using PlayerService.Models;
+using PlayerService.SyncDataServices.Http;
 
 namespace PlayerService.Contollers {
     
@@ -14,10 +14,12 @@ namespace PlayerService.Contollers {
     public class PlayersController : ControllerBase {
         private readonly IPlayerRepo _repository;
         private readonly IMapper _mapper;
-
-        public PlayersController(IPlayerRepo repository, IMapper mapper) {
+        private readonly IPlayerDataClient _playerDataClient;
+        public PlayersController(IPlayerRepo repository, IMapper mapper,
+        IPlayerDataClient playerDataClient) {
             _repository = repository;
             _mapper = mapper;
+            _playerDataClient = playerDataClient;
         }
         [HttpGet]
         public ActionResult<IEnumerable<PlayerReadDto>> GetPlayers() {
@@ -34,7 +36,8 @@ namespace PlayerService.Contollers {
             if (playerItem != null) {
                 return Ok(_mapper.Map<PlayerReadDto>(playerItem));
             } else {
-                 return NotFound();
+                // href = Url.Link(nameof(GetPlayerById))
+                return NotFound();
             }
         }
 
@@ -42,12 +45,18 @@ namespace PlayerService.Contollers {
 
         //return 201 w/ the route (AKA URI)
         [HttpPost]
-        public ActionResult<PlayerReadDto> CreatePlayerm(PlayerCreateDto playerCreateDto) {
+        public async Task<ActionResult<PlayerReadDto>> CreatePlayer(PlayerCreateDto playerCreateDto) {
             var playerModel = _mapper.Map<Player>(playerCreateDto);
             _repository.CreatePlayer(playerModel);
             _repository.SaveChanges();
 
             var playerReadDto = _mapper.Map<PlayerReadDto>(playerModel);
+
+            try {
+                await _playerDataClient.SendPlayerToScouting(playerReadDto);
+            } catch(Exception ex) {
+                Console.WriteLine($"--> Could not send synchronously: {ex.Message}");
+            }
 
             return CreatedAtRoute(nameof(GetPlayerById), new {Id=playerReadDto.Id}, playerReadDto);
         }

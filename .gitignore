@@ -1,3 +1,6 @@
-obj/
-Properties/
-bin/
+playerservice/obj/
+playerservice/Properties/
+playerservice/bin/
+scoutingservice/obj/
+scoutingservice/Properties/
+scoutingservice/bin/
