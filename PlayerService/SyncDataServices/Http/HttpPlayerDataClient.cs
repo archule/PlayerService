@@ -6,8 +6,7 @@ using PlayerService.Dtos;
 
 namespace PlayerService.SyncDataServices.Http
 {      
-       
-          public class HttpPlayerDataClient : IPlayerDataClient
+        public class HttpPlayerDataClient : IPlayerDataClient
     {
         private readonly HttpClient _httpClient;
         private readonly IConfiguration _configuration;

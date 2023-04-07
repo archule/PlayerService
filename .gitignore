@@ -4,3 +4,5 @@ playerservice/bin/
 scoutingservice/obj/
 scoutingservice/Properties/
 scoutingservice/bin/
+draft/node_modules
+
